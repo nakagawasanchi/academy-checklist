@@ -37,6 +37,8 @@ input[type=checkbox]:checked::after{content:"✓";position:absolute;inset:0;disp
 .txt small{display:block;font-weight:600;color:var(--muted);font-size:12px;margin-top:2px;line-height:1.5}
 li:has(input:checked){opacity:.55}
 li:has(input:checked) .txt{text-decoration:line-through;text-decoration-color:var(--done);color:var(--done)}
+li.imp{border:2px solid #c0392b;background:#fdf6f5}
+li.imp .txt{color:#a63a30}
 .warn{background:#fdf3f2;border:1.5px solid #dba49c;border-radius:12px;padding:14px;margin-top:18px}
 .warn h2{font-size:14px;font-weight:800;color:#b0463c;margin-bottom:6px}
 .warn ol{padding-left:20px;font-size:13.5px;line-height:1.9;font-weight:600}
@@ -58,49 +60,89 @@ footer button{flex:1;font-size:15px;font-weight:800;padding:12px;border-radius:1
 <main>
 
 <section>
-  <div class="sec-title">起動（開始60分前まで）<span class="cnt"></span></div>
+  <div class="sec-title">起動・事前準備（開始60分前まで）<span class="cnt"></span></div>
   <ul>
     <li><label><input type="checkbox"><span class="txt">Macを再起動した</span></label></li>
     <li><label><input type="checkbox"><span class="txt">再起動後にOBSを起動し直した</span></label></li>
     <li><label><input type="checkbox"><span class="txt">電源（PD給電）がMacに来ている</span></label></li>
     <li><label><input type="checkbox"><span class="txt">有線LANで接続されている</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">回線速度テストをした</span></label></li>
     <li><label><input type="checkbox"><span class="txt">Macの通知をオフ（集中モード）</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">ストレージ空き容量OK</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">不要なアプリは立ち上がっていない</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">生徒画面確認用の端末を充電してある</span></label></li>
   </ul>
 </section>
 
 <section>
-  <div class="sec-title">映像・音声（開始30分前まで）<span class="cnt"></span></div>
+  <div class="sec-title">機材・電源<span class="cnt"></span></div>
+  <ul>
+    <li><label><input type="checkbox"><span class="txt">ミキサーの電源ON</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">電子ピアノの電源ON</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">カメラZV-1が電源に接続されている</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">BGM再生機器の準備ができている</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">Mac全体のサウンド出力がオーディオインターフェースになっている</span></label></li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-title">身だしなみ<span class="cnt"></span></div>
+  <ul>
+    <li><label><input type="checkbox"><span class="txt">配信用のそれなりの服を着ている</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">Apple Watchをつけている</span></label></li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-title">映像<span class="cnt"></span></div>
   <ul>
     <li><label><input type="checkbox"><span class="txt">講師カメラがプレビューに映っている</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">講師カメラに余計なものが写っていない</span></label></li>
     <li><label><input type="checkbox"><span class="txt">ピアノカメラがプレビューに映っている</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">マイクのメーターが振れる</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">ピアノの音のメーターが振れる</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">ピアノカメラに余計なものが映っていない</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">クロマキーが綺麗に抜けている</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">ピントが自分に合っている</span></label></li>
     <li><label><input type="checkbox"><span class="txt">エンコーダが「Apple VT ハードウェア」になっている</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">オープニング動画を一度再生して音が出る</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">メディア・BGMソースのモニタリングがオフ</span></label></li>
   </ul>
 </section>
 
 <section>
-  <div class="sec-title">シーン・操作（開始15分前まで）<span class="cnt"></span></div>
+  <div class="sec-title">音声<span class="cnt"></span></div>
+  <ul>
+    <li><label><input type="checkbox"><span class="txt">マイクは配信用にセットしてある</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">マイクのメーターが振れる・PANが振られていない</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">ピアノの音のメーターが振れる</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">声・ピアノ・課題の音声・BGMの音量が適切</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">メディア・BGMソースのモニタリングがオフ</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">全シーンでミュートになっているソースがない</span></label></li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-title">画面・シーン<span class="cnt"></span></div>
   <ul>
     <li><label><input type="checkbox"><span class="txt">全シーンを一巡して表示確認</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">講義画面のキャプチャが正しいページを映している</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">講師コンソールが正しく写せている</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">スライドを使う授業ではスライドを写せている</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">課題のデモが正しく動く</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">課題のデモの音が正しく入っている</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">画面共有するアプリに写してはいけないものが写っていない</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">オープニング動画を一度再生して音が出る</span></label></li>
     <li><label><input type="checkbox"><span class="txt">Stream Deckでシーン切替が動く</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">配信システム側に授業が正しい時刻で作成されている</span></label></li>
   </ul>
 </section>
 
 <section>
   <div class="sec-title">配信開始（開始10分前）<span class="cnt"></span></div>
   <ul>
+    <li class="imp"><label><input type="checkbox"><span class="txt">【重要】ストリームキーが本番のものになっている</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">配信システム側に授業が正しい時刻で作成されている</span></label></li>
     <li><label><input type="checkbox"><span class="txt">「注意事項」シーンにして配信開始</span></label></li>
     <li><label><input type="checkbox"><span class="txt">録画も開始した</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">受講生側アプリ（スマホ）で映像と音を実確認</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">生徒画面確認用の端末を用意した</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">生徒画面で映像と音を実確認した</span></label></li>
     <li><label><input type="checkbox"><span class="txt">iPhoneテザリング（予備回線）を準備した</span></label></li>
     <li><label><input type="checkbox"><span class="txt">オプチャを開いた端末を手元に置いた</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">飲み物OK・スマホはマナーモード</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">飲み物を用意した・スマホはマナーモード</span></label></li>
   </ul>
 </section>
 
