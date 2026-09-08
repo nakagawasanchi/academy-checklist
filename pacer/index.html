@@ -46,6 +46,8 @@ main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px 4
 .seg.past{opacity:.5}
 .seg.cur{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,165,78,.25)}
 .seg .bar{position:absolute;left:0;bottom:0;height:4px;background:var(--gold);width:0}
+.slim{margin-top:10px;height:6px;border-radius:3px;background:#ece7db;overflow:hidden}
+.slim .bar{height:100%;background:var(--gold);width:0}
 .legend{display:flex;gap:10px;font-size:12px;font-weight:700;color:var(--muted);margin:0 0 10px 4px;flex-wrap:wrap}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px}
 .hint{font-size:12px;color:var(--muted);text-align:center;margin-top:16px;line-height:1.7}
@@ -265,11 +267,15 @@ function render(){
     const total = rs.reduce((a,s)=>a+s.min,0);
     div.innerHTML = `<div class="time">${rs.length ? hhmm(start)+'<small>〜'+hhmm(end)+'　'+total+'分</small>' : '<small>宿題</small>'}</div>
       <div><div class="title">${row.t}${row.hw ? '<span class="hw">'+row.hw+'</span>' : ''}</div>
-      <div class="segs">${rs.map(s => {
+      ${(rs.length === 1 && rs[0].kind === 'other')
+        ? (() => { const s = rs[0]; const st = now >= s.end ? 'past' : (now >= s.start ? 'cur' : '');
+            const pct = st === 'cur' ? Math.min(100, (now - s.start)/(s.end - s.start)*100) : (st === 'past' ? 100 : 0);
+            return `<div class="slim"><div class="bar" style="width:${pct}%"></div></div>`; })()
+        : `<div class="segs">${rs.map(s => {
         const st = now >= s.end ? 'past' : (now >= s.start ? 'cur' : '');
         const pct = st === 'cur' ? Math.min(100, (now - s.start)/(s.end - s.start)*100) : (st === 'past' ? 100 : 0);
         return `<div class="seg k-${s.kind} ${st}"><span class="n">${KIND[s.kind]||row.t}</span><span class="m">${s.min}分 ${hhmm(s.start)}〜</span><div class="bar" style="width:${pct}%"></div></div>`;
-      }).join('')}</div></div>`;
+      }).join('')}</div>`}</div>`;
     div.addEventListener('click', () => { const first = segs.findIndex(s => s.ri === ri); if (first >= 0) { anchor = {segIndex:first, at: Date.now()}; render(); } });
     list.appendChild(div);
     return {div, state};
