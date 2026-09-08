@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>授業ペーサー</title>
+<style>
+:root{--navy:#12293b;--navy2:#0e2433;--gold:#c9a54e;--gold-l:#f0d9a0;--gold-d:#a67c2e;
+ --bg:#f7f4ec;--card:#fff;--ink:#1b2a38;--muted:#8a8271;--past:#b9b3a6;--red:#d64545}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN",sans-serif;background:var(--bg);color:var(--ink);overflow:hidden;display:flex;flex-direction:column}
+header{background:linear-gradient(170deg,var(--navy2),#081220);color:#f2ead7;padding:14px 20px 12px;
+ display:flex;align-items:center;gap:16px;flex-wrap:wrap;box-shadow:0 2px 12px rgba(0,0,0,.3);z-index:5}
+.clock{font-size:64px;font-weight:900;letter-spacing:.04em;color:var(--gold-l);font-variant-numeric:tabular-nums;line-height:1}
+.now{flex:1;min-width:260px}
+.now .lbl{font-size:13px;color:#cbbd97;font-weight:700;letter-spacing:.1em}
+.now .cur{font-size:26px;font-weight:800;color:#fff;margin-top:2px;line-height:1.3}
+.now .rem{font-size:20px;font-weight:800;color:var(--gold-l);margin-top:2px;font-variant-numeric:tabular-nums}
+.now .rem.over{color:#ff8a80}
+.ctrl{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+select,button,input[type=time]{font-family:inherit;font-size:16px;font-weight:700;padding:10px 12px;border-radius:10px;border:2px solid var(--gold);background:#fff;color:var(--navy)}
+button.primary{background:linear-gradient(160deg,var(--gold-l),var(--gold) 60%,var(--gold-d));border-color:var(--gold-d);color:#241a05}
+button.ghost{background:transparent;color:var(--gold-l);border-color:rgba(240,217,160,.5)}
+.wake{font-size:12px;font-weight:700;color:#cbbd97}
+.wake.on{color:#8fe3a0}
+main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 18px 40px}
+.row{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:stretch;background:var(--card);
+ border:2px solid #e2ddd0;border-radius:14px;margin-bottom:10px;padding:12px 14px;transition:opacity .2s}
+.row.past{opacity:.45}
+.row.cur{border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,165,78,.25),0 4px 14px rgba(0,0,0,.08)}
+.row .time{font-size:22px;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums;line-height:1.3}
+.row .time small{display:block;font-size:13px;color:var(--muted);font-weight:700}
+.row .title{font-size:20px;font-weight:800;line-height:1.35}
+.row .title .hw{font-size:13px;color:var(--muted);font-weight:700;margin-left:6px}
+.segs{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.seg{flex:1 1 auto;min-width:96px;border-radius:9px;padding:8px 10px;font-weight:800;font-size:15px;border:2px solid transparent;
+ display:flex;justify-content:space-between;align-items:center;gap:8px;position:relative;overflow:hidden}
+.seg .n{white-space:nowrap}.seg .m{font-size:13px;opacity:.85;white-space:nowrap;font-variant-numeric:tabular-nums}
+.seg.k-lec{background:#eef2f7;color:var(--navy)}
+.seg.k-demo{background:#fbf3df;color:#7a5b16}
+.seg.k-task{background:#e8f4ee;color:#1f6b45}
+.seg.k-other{background:#f2efe8;color:#5a5245}
+.seg.past{opacity:.5}
+.seg.cur{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,165,78,.25)}
+.seg .bar{position:absolute;left:0;bottom:0;height:4px;background:var(--gold);width:0}
+.legend{display:flex;gap:10px;font-size:12px;font-weight:700;color:var(--muted);margin:0 0 10px 4px;flex-wrap:wrap}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.hint{font-size:12px;color:var(--muted);text-align:center;margin-top:16px;line-height:1.7}
+.end{font-size:16px;font-weight:800;color:var(--navy);text-align:center;margin-top:12px}
+</style>
+</head>
+<body>
+<header>
+  <div class="clock" id="clock">--:--</div>
+  <div class="now">
+    <div class="lbl">NOW</div>
+    <div class="cur" id="curLabel">開始前</div>
+    <div class="rem" id="curRem">&nbsp;</div>
+  </div>
+  <div class="ctrl">
+    <select id="koma"></select>
+    <select id="start">
+      <option value="13:30">13:30開始</option>
+      <option value="21:30">21:30開始</option>
+      <option value="custom">時刻指定</option>
+    </select>
+    <input type="time" id="customStart" value="21:30" style="display:none">
+    <button class="primary" id="startNow">今から開始</button>
+    <button class="ghost" id="reset">ズレ解除</button>
+    <span class="wake" id="wake">画面ON維持: 準備中</span>
+  </div>
+</header>
+<main>
+  <div class="legend"><span><i style="background:#c9d3e0"></i>講義</span><span><i style="background:#f0d9a0"></i>デモ</span><span><i style="background:#b8dcc8"></i>課題</span><span><i style="background:#ddd6c8"></i>その他</span>　行をタップ＝その行を「今」に合わせる</div>
+  <div id="list"></div>
+  <div class="end" id="endLine"></div>
+  <div class="hint">現在時刻は端末の時計。ズレたら行をタップして進行を合わせ直せます（以降の時刻がまとめて動きます）。<br>データ元: Notion「アカデミー理論コース コマ別 進行設計」（2026-09-08時点）</div>
+</main>
+
+<script>
+// ===== データ =====
+// parts: [種別, 分]  種別 lec=講義 demo=デモ task=課題 other=その他
+// hw: 宿題メモ（タイムラインには含めない）
+const L=(m)=>['lec',m], D=(m)=>['demo',m], T=(m)=>['task',m], O=(m)=>['other',m];
+const KOMA = [
+ {id:'n1', name:'入門コマ1 ── レッスン1前半＋コードピアノとは', rows:[
+  {t:'冒頭：宿題回収・前回の詰まり', parts:[O(8)]},
+  {t:'説明パート（Canva 8枚＋実演）', parts:[O(15)]},
+  {t:'1 3つの音を覚えよう', parts:[L(2),T(2)]},
+  {t:'2 3つの音で伴奏しよう', parts:[L(1),T(2)]},
+  {t:'3 もう1曲伴奏しよう', parts:[L(1),T(4)]},
+  {t:'4 メロディを弾こう', parts:[L(1),T(2)]},
+  {t:'5 メロディとベースを両手で弾こう', parts:[L(2),T(2)]},
+  {t:'6 新しいピアノ人生の幕開け', parts:[L(1),T(2)]},
+  {t:'7 目標を確認しよう', parts:[L(1)]},
+  {t:'8 コードを覚えよう', parts:[L(2),T(2)]},
+  {t:'9 コードで伴奏しよう（今日のゴール）', parts:[L(2),T(3)]},
+  {t:'まとめ', parts:[O(5)]},
+ ]},
+ {id:'n2', name:'入門コマ2 ── レッスン1後半（10〜17）', rows:[
+  {t:'冒頭：宿題回収・前回の詰まり', parts:[O(8)]},
+  {t:'10 指定音域内でコードを弾こう', parts:[L(4),T(5)]},
+  {t:'11 別の音域内でコードを弾こう', parts:[L(2),T(3)]},
+  {t:'12 スムーズな転回形でコード伴奏', parts:[L(3),T(4)]},
+  {t:'13 メロディを小指で弾こう', parts:[L(2),T(2)]},
+  {t:'14 メロディに和音をつけよう', parts:[L(3),T(2)]},
+  {t:'15 メロディに和音をつけて通して弾こう', parts:[L(2),T(3)]},
+  {t:'16 曲を完成させよう', parts:[L(1),T(4)]},
+  {t:'17 コードピアノメソッドを確認しよう', parts:[L(2)]},
+  {t:'質問', parts:[O(5)]},
+  {t:'まとめ', parts:[O(5)]},
+ ]},
+ {id:'n3', name:'入門コマ3 ── レッスン2 メソッドに慣れよう', rows:[
+  {t:'冒頭：宿題回収・前回の詰まり', parts:[O(8)]},
+  {t:'1 レッスン目標を確認しよう', parts:[L(2)]},
+  {t:'2 ベースパートを弾こう', parts:[L(1),T(2)]},
+  {t:'3 メロディを弾こう', parts:[L(1),T(2)]},
+  {t:'4 メロディとベースを両手で弾こう', parts:[L(2),T(2)]},
+  {t:'5 コードを復習しよう', parts:[L(2),T(2)]},
+  {t:'6 コードで伴奏しよう', parts:[L(2),T(2)]},
+  {t:'7 メロディに和音をつけよう', parts:[L(2),T(2)]},
+  {t:'8 和音をつけて1曲通して弾こう', parts:[L(2),T(5)]},
+  {t:'9 曲を完成させよう', parts:[L(2),T(6)]},
+  {t:'質問', parts:[O(8)]},
+  {t:'まとめ', parts:[O(5)]},
+ ]},
+ {id:'n4', name:'入門コマ4 ── レッスン3 新しい曲をメソッド通りに', rows:[
+  {t:'冒頭：宿題回収・前回の詰まり', parts:[O(8)]},
+  {t:'1 新しい曲を覚えよう', parts:[L(3)]},
+  {t:'2 ベースパートを弾こう', parts:[L(2),T(4)]},
+  {t:'3 メロディを弾こう', parts:[L(2),T(5)]},
+  {t:'4 メロディとベースを両手で弾こう', parts:[L(3),T(5)]},
+  {t:'5 コードで伴奏しよう', parts:[L(3),T(5)]},
+  {t:'6 メロディに和音をつけよう（今日の山）', parts:[L(5),T(8)]},
+  {t:'7 曲を完成させよう', parts:[L(2)], hw:'課題6分は宿題'},
+  {t:'まとめ', parts:[O(5)]},
+ ]},
+ {id:'n5', name:'入門コマ5 ── レッスン4 トライアドで曲を豪華に', rows:[
+  {t:'冒頭：宿題回収・前回の詰まり', parts:[O(8)]},
+  {t:'1 全音と半音を覚えよう', parts:[L(2),T(2)]},
+  {t:'2 トライアドを覚えよう', parts:[L(3)]},
+  {t:'3 メジャートライアドを覚えよう', parts:[L(2),T(2)]},
+  {t:'4 メジャートライアドを伴奏に入れよう（見せ場）', parts:[L(3),T(7)]},
+  {t:'5 メジャートライアドをメロディに入れよう', parts:[L(2),T(6)]},
+  {t:'6 マイナートライアドを覚えよう', parts:[L(3),T(3)]},
+  {t:'7 マイナートライアドを伴奏に入れよう', parts:[L(3),T(7)]},
+  {t:'8 1曲通して右手を弾こう', parts:[L(1)], hw:'8分は宿題'},
+  {t:'9 曲を完成させよう', parts:[L(1)], hw:'7分は宿題'},
+  {t:'まとめ', parts:[O(5)]},
+ ]},
+ {id:'n6', name:'入門コマ6 ── レッスン5 入門編の最終課題', rows:[
+  {t:'冒頭：宿題回収・前回の詰まり', parts:[O(8)]},
+  {t:'1 最終課題曲を確認しよう', parts:[L(3)]},
+  {t:'2 ベースパートを弾こう', parts:[L(1),T(4)]},
+  {t:'3 メロディを弾こう', parts:[L(1),T(3)]},
+  {t:'4 メロディとベースを両手で弾こう', parts:[L(2),T(3)]},
+  {t:'5 コードを覚えよう', parts:[L(2),T(3)]},
+  {t:'6 指定音域内でコードを弾こう', parts:[L(3),T(7)]},
+  {t:'7 コードで伴奏しよう', parts:[L(2)], hw:'8分は宿題'},
+  {t:'8 メロディに和音をつけよう（着手のみ）', parts:[L(4),T(8)], hw:'完了は宿題'},
+  {t:'9 曲を完成させよう', parts:[L(1)], hw:'12分は宿題'},
+  {t:'10 今後の学習方針（まとめ）', parts:[O(5)]},
+ ]},
+ {id:'m1', name:'中級コマ1 ── レッスン1 度数とメジャースケール', rows:[
+  {t:'連絡事項', parts:[O(1)]},
+  {t:'【レッスン外】コードピアノとは？', parts:[O(8)]},
+  {t:'【レッスン外】中級のゴール', parts:[O(3)]},
+  {t:'1 メジャースケールを覚えよう', parts:[L(5),D(2),T(5)]},
+  {t:'2 度数を覚えよう', parts:[L(4),T(2)]},
+  {t:'3 度数の詳細を覚えよう', parts:[L(5),D(2),T(2)]},
+  {t:'4 5つの度数を押さえよう（今日の山）', parts:[L(5),D(2),T(8)]},
+  {t:'まとめ', parts:[O(1)]},
+ ]},
+ {id:'m2', name:'中級コマ2 ── レッスン2 基本4和音', rows:[
+  {t:'冒頭：宿題回収・前回の詰まり', parts:[O(8)]},
+  {t:'1 メジャー系の4和音を覚えよう', parts:[L(6),T(6)]},
+  {t:'2 マイナー系の4和音を覚えよう', parts:[L(5),T(7)]},
+  {t:'3 4和音を指定音域で転回しよう（最重量）', parts:[L(6),T(12)]},
+  {t:'4〜6 課題曲（宿題）', parts:[], hw:'10分＋12分＋7分は宿題'},
+  {t:'質問', parts:[O(5)]},
+  {t:'まとめ', parts:[O(5)]},
+ ]},
+ {id:'m3', name:'中級コマ3 ── レッスン3 左手パターン', rows:[
+  {t:'冒頭：宿題回収・前回の詰まり', parts:[O(8)]},
+  {t:'1 1-5-1伴奏を覚えよう', parts:[L(4),T(4)]},
+  {t:'2 1-5-1伴奏を実践しよう', parts:[L(3),T(7)]},
+  {t:'3 1-5-1伴奏で曲を完成させよう', parts:[L(2)], hw:'8分は宿題'},
+  {t:'4 1-5-1-2-3伴奏を覚えよう', parts:[L(4),T(5)]},
+  {t:'5 1-5-1-2-3伴奏を実践しよう', parts:[L(3),T(6)]},
+  {t:'6 1-5-1-2-3伴奏で曲を完成させよう', parts:[L(4)], hw:'10分は宿題'},
+  {t:'質問', parts:[O(5)]},
+  {t:'まとめ', parts:[O(5)]},
+ ]},
+ {id:'m4', name:'中級コマ4 ── レッスン4 応用4和音', rows:[
+  {t:'冒頭：宿題回収・前回の詰まり', parts:[O(8)]},
+  {t:'1 7sus4とaug7を覚えよう', parts:[L(6),T(9)]},
+  {t:'2 dim7を覚えよう', parts:[L(6),T(9)]},
+  {t:'3 課題曲に4和音を入れて両手で伴奏', parts:[L(4),T(9)]},
+  {t:'4 課題曲のメロディに和音をつけよう', parts:[L(2)], hw:'7分は宿題'},
+  {t:'5 課題曲を両手で弾こう', parts:[L(1)], hw:'6分は宿題'},
+  {t:'6 課題曲に1-5-1伴奏をつけよう', parts:[L(1)], hw:'11分は宿題'},
+  {t:'まとめ', parts:[O(5)]},
+ ]},
+ {id:'m5', name:'中級コマ5 ── レッスン5 add9', rows:[
+  {t:'冒頭：宿題回収・前回の詰まり', parts:[O(8)]},
+  {t:'1 add9を学ぼう', parts:[L(6),T(4)]},
+  {t:'2 add9を入れて伴奏しよう', parts:[L(3),T(3)]},
+  {t:'3 add9の定番フレーズを使ってみよう', parts:[L(4),T(3)]},
+  {t:'4 add9を入れてメロディに和音をつけよう', parts:[L(4),T(5)]},
+  {t:'5 add9を入れた曲を完成させよう', parts:[L(3),T(3)]},
+  {t:'6 ここまでを振り返ろう', parts:[L(2)]},
+  {t:'質問', parts:[O(7)]},
+  {t:'まとめ', parts:[O(5)]},
+ ]},
+];
+const KIND = {lec:'講義', demo:'デモ', task:'課題', other:''};
+
+// ===== 状態 =====
+const $ = id => document.getElementById(id);
+let komaId = localStorage.getItem('pacer.koma') || 'm1';
+let startMode = localStorage.getItem('pacer.start') || '21:30';
+let customStart = localStorage.getItem('pacer.custom') || '21:30';
+let anchor = null;      // {segIndex, at: Date(ms)} 行タップで「その行を今に合わせる」
+let startNowAt = null;  // 「今から開始」を押した時刻(ms)
+
+KOMA.forEach(k => { const o = document.createElement('option'); o.value = k.id; o.textContent = k.name; $('koma').appendChild(o); });
+$('koma').value = komaId; $('start').value = startMode; $('customStart').value = customStart;
+$('customStart').style.display = startMode === 'custom' ? '' : 'none';
+
+function baseStart(){
+  if (startNowAt) return startNowAt;
+  const hm = startMode === 'custom' ? customStart : startMode;
+  const [h,m] = hm.split(':').map(Number);
+  const d = new Date(); d.setHours(h, m, 0, 0); return d.getTime();
+}
+// セグメント列を展開（行ごと・パーツごとに開始/終了ms）
+function buildSegs(){
+  const k = KOMA.find(x => x.id === komaId);
+  let t = baseStart(); const segs = [];
+  k.rows.forEach((row, ri) => {
+    row.parts.forEach((p, pi) => { segs.push({ri, pi, kind:p[0], min:p[1], start:t, end:t + p[1]*60000}); t += p[1]*60000; });
+  });
+  // アンカー適用：指定セグメントの開始を anchor.at にずらす（以降を平行移動）
+  if (anchor) {
+    const s = segs[anchor.segIndex]; if (s) { const delta = anchor.at - s.start; segs.forEach((x,i) => { if (i >= anchor.segIndex) { x.start += delta; x.end += delta; } }); }
+  }
+  return {k, segs};
+}
+const hhmm = ms => { const d = new Date(ms); return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'); };
+const mmss = ms => { const s = Math.max(0, Math.round(ms/1000)); return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); };
+
+function render(){
+  const {k, segs} = buildSegs(); const now = Date.now();
+  const list = $('list'); list.innerHTML = '';
+  let curSeg = null;
+  segs.forEach(s => { if (now >= s.start && now < s.end) curSeg = s; });
+  const rows = k.rows.map((row, ri) => {
+    const rs = segs.filter(s => s.ri === ri);
+    const start = rs.length ? rs[0].start : null, end = rs.length ? rs[rs.length-1].end : null;
+    const state = !rs.length ? 'hw' : (now >= end ? 'past' : (now >= start ? 'cur' : 'future'));
+    const div = document.createElement('div'); div.className = 'row ' + state; div.dataset.ri = ri;
+    const total = rs.reduce((a,s)=>a+s.min,0);
+    div.innerHTML = `<div class="time">${rs.length ? hhmm(start)+'<small>〜'+hhmm(end)+'　'+total+'分</small>' : '<small>宿題</small>'}</div>
+      <div><div class="title">${row.t}${row.hw ? '<span class="hw">'+row.hw+'</span>' : ''}</div>
+      <div class="segs">${rs.map(s => {
+        const st = now >= s.end ? 'past' : (now >= s.start ? 'cur' : '');
+        const pct = st === 'cur' ? Math.min(100, (now - s.start)/(s.end - s.start)*100) : (st === 'past' ? 100 : 0);
+        return `<div class="seg k-${s.kind} ${st}"><span class="n">${KIND[s.kind]||row.t}</span><span class="m">${s.min}分 ${hhmm(s.start)}〜</span><div class="bar" style="width:${pct}%"></div></div>`;
+      }).join('')}</div></div>`;
+    div.addEventListener('click', () => { const first = segs.findIndex(s => s.ri === ri); if (first >= 0) { anchor = {segIndex:first, at: Date.now()}; render(); } });
+    list.appendChild(div);
+    return {div, state};
+  });
+  // ヘッダ
+  if (curSeg) {
+    const row = k.rows[curSeg.ri];
+    $('curLabel').textContent = row.t + '　' + (KIND[curSeg.kind] ? '［' + KIND[curSeg.kind] + '］' : '');
+    $('curRem').textContent = '残り ' + mmss(curSeg.end - now) + '（' + hhmm(curSeg.end) + 'まで）';
+    $('curRem').className = 'rem';
+  } else if (segs.length && now < segs[0].start) {
+    $('curLabel').textContent = '開始前（' + hhmm(segs[0].start) + ' 開始）';
+    $('curRem').textContent = '開始まで ' + mmss(segs[0].start - now); $('curRem').className = 'rem';
+  } else if (segs.length) {
+    $('curLabel').textContent = '終了';
+    $('curRem').textContent = '予定終了 ' + hhmm(segs[segs.length-1].end) + ' から ' + mmss(now - segs[segs.length-1].end) + ' 経過';
+    $('curRem').className = 'rem over';
+  }
+  const last = segs[segs.length-1];
+  $('endLine').textContent = last ? '予定終了 ' + hhmm(last.end) + '（合計 ' + segs.reduce((a,s)=>a+s.min,0) + '分）' : '';
+  // 現在行を見える位置へ（初回とセグメント変化時）
+  const curRow = rows.find(r => r.state === 'cur');
+  if (curRow && render.lastCur !== curRow.div.dataset.ri) { curRow.div.scrollIntoView({block:'center', behavior:'smooth'}); render.lastCur = curRow.div.dataset.ri; }
+}
+function tick(){ const d = new Date(); $('clock').textContent = String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0') + ':' + String(d.getSeconds()).padStart(2,'0'); render(); }
+setInterval(tick, 1000); tick();
+
+$('koma').addEventListener('change', e => { komaId = e.target.value; localStorage.setItem('pacer.koma', komaId); anchor = null; startNowAt = null; render.lastCur = null; render(); });
+$('start').addEventListener('change', e => { startMode = e.target.value; localStorage.setItem('pacer.start', startMode); $('customStart').style.display = startMode === 'custom' ? '' : 'none'; anchor = null; startNowAt = null; render(); });
+$('customStart').addEventListener('change', e => { customStart = e.target.value; localStorage.setItem('pacer.custom', customStart); anchor = null; startNowAt = null; render(); });
+$('startNow').addEventListener('click', () => { startNowAt = Date.now(); anchor = null; render.lastCur = null; render(); });
+$('reset').addEventListener('click', () => { anchor = null; startNowAt = null; render.lastCur = null; render(); });
+
+// ===== 画面消灯防止（Screen Wake Lock）=====
+let wakeLock = null;
+async function requestWake(){
+  try {
+    if (!('wakeLock' in navigator)) { $('wake').textContent = '画面ON維持: 非対応（iPad設定で自動ロックを「なし」に）'; return; }
+    wakeLock = await navigator.wakeLock.request('screen');
+    $('wake').textContent = '画面ON維持: ON'; $('wake').className = 'wake on';
+    wakeLock.addEventListener('release', () => { $('wake').textContent = '画面ON維持: 解除（タップで再開）'; $('wake').className = 'wake'; });
+  } catch(e) { $('wake').textContent = '画面ON維持: タップで開始'; }
+}
+requestWake();
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') requestWake(); });
+document.addEventListener('touchstart', () => { if (!wakeLock || wakeLock.released) requestWake(); }, {passive:true});
+document.addEventListener('click', () => { if (!wakeLock || wakeLock.released) requestWake(); });
+</script>
+</body>
+</html>
