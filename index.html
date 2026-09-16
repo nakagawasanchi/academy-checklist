@@ -17,7 +17,20 @@ header{background:linear-gradient(170deg,var(--navy2),#081220);color:var(--gold-
 header h1{font-size:19px;font-weight:800;letter-spacing:.08em}
 .progress-wrap{margin-top:10px;background:rgba(255,255,255,.15);border-radius:99px;height:10px;overflow:hidden}
 .progress{height:100%;width:0%;background:linear-gradient(90deg,var(--gold-l),var(--gold));border-radius:99px;transition:width .25s}
-.pct{font-size:12px;margin-top:5px;color:#cbbd97;font-weight:700}
+.pct{font-size:12px;color:#cbbd97;font-weight:700}
+.hdr-row{display:flex;align-items:center;justify-content:space-between;margin-top:7px}
+.toggle{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:#cbbd97;cursor:pointer;user-select:none;padding:0}
+.toggle input{appearance:none;width:0;height:0;position:absolute;opacity:0;border:none;flex:none;margin:0}
+.toggle .sw{width:38px;height:22px;border-radius:99px;background:rgba(255,255,255,.22);position:relative;transition:background .2s;flex:none}
+.toggle .sw::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .2s}
+.toggle input:checked+.sw{background:linear-gradient(90deg,var(--gold-l),var(--gold))}
+.toggle input:checked+.sw::after{left:19px}
+body.hide-done li:has(input:checked){display:none}
+body.hide-done section.all-done{display:none}
+.know{background:var(--card);border:1px solid #e2ddd0;border-radius:12px;padding:14px;margin-top:18px}
+.know h2{font-size:14px;font-weight:800;color:var(--navy);margin-bottom:6px}
+.know ul{padding-left:18px;list-style:disc;font-size:13.5px;line-height:1.9;font-weight:600}
+.know ul li{background:none;border:none;box-shadow:none;margin:0;border-radius:0}
 main{max-width:560px;margin:0 auto;padding:14px}
 section{margin-top:18px}
 .sec-title{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;color:var(--navy);
@@ -54,7 +67,8 @@ footer button{flex:1;font-size:15px;font-weight:800;padding:12px;border-radius:1
 <header>
   <h1>🎹 Jazz-Steps Academy 配信前チェック</h1>
   <div class="progress-wrap"><div class="progress" id="bar"></div></div>
-  <div class="pct" id="pct">0 / 0</div>
+  <div class="hdr-row"><div class="pct" id="pct">0 / 0</div>
+  <label class="toggle"><input type="checkbox" id="hide-done"><span class="sw"></span>未チェックのみ表示</label></div>
 </header>
 
 <main>
@@ -63,11 +77,8 @@ footer button{flex:1;font-size:15px;font-weight:800;padding:12px;border-radius:1
   <div class="sec-title">起動・事前準備（開始60分前まで）<span class="cnt"></span></div>
   <ul>
     <li><label><input type="checkbox"><span class="txt">Macを再起動した</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">再起動後にOBSを起動し直した</span></label></li>
     <li><label><input type="checkbox"><span class="txt">電源（PD給電）がMacに来ている</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">有線LANで接続されている</span></label></li>
     <li><label><input type="checkbox"><span class="txt">回線速度テストをした</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">Macの通知をオフ（集中モード）</span></label></li>
     <li><label><input type="checkbox"><span class="txt">不要なアプリは立ち上がっていない</span></label></li>
     <li><label><input type="checkbox"><span class="txt">生徒画面確認用の端末を充電してある</span></label></li>
   </ul>
@@ -101,7 +112,6 @@ footer button{flex:1;font-size:15px;font-weight:800;padding:12px;border-radius:1
     <li><label><input type="checkbox"><span class="txt">ピアノカメラに余計なものが映っていない</span></label></li>
     <li><label><input type="checkbox"><span class="txt">クロマキーが綺麗に抜けている</span></label></li>
     <li><label><input type="checkbox"><span class="txt">ピントが自分に合っている</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">エンコーダが「Apple VT ハードウェア」になっている</span></label></li>
   </ul>
 </section>
 
@@ -121,7 +131,6 @@ footer button{flex:1;font-size:15px;font-weight:800;padding:12px;border-radius:1
   <div class="sec-title">画面・シーン<span class="cnt"></span></div>
   <ul>
     <li><label><input type="checkbox"><span class="txt">今日の内容と各課題の制限時間、追加課題を確認した</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">今日の内容と各課題の制限時間、追加課題の紙が手元にある</span></label></li>
     <li><label><input type="checkbox"><span class="txt">全シーンを一巡して表示確認</span></label></li>
     <li><label><input type="checkbox"><span class="txt">講師コンソールが正しく写せている</span></label></li>
     <li><label><input type="checkbox"><span class="txt">スライドを使う授業ではスライドを写せている</span></label></li>
@@ -138,10 +147,8 @@ footer button{flex:1;font-size:15px;font-weight:800;padding:12px;border-radius:1
   <ul>
     <li class="imp"><label><input type="checkbox"><span class="txt">【重要】ストリームキーが本番のものになっている</span></label></li>
     <li><label><input type="checkbox"><span class="txt">「注意事項」シーンにして配信開始</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">録画も開始した</span></label></li>
     <li><label><input type="checkbox"><span class="txt">生徒画面確認用の端末を用意した</span></label></li>
     <li><label><input type="checkbox"><span class="txt">生徒画面で映像と音を実確認した</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">iPhoneテザリング（予備回線）を準備した</span></label></li>
     <li><label><input type="checkbox"><span class="txt">オプチャを開いた端末を手元に置いた</span></label></li>
     <li><label><input type="checkbox"><span class="txt">飲み物を用意した・スマホはマナーモード</span></label></li>
   </ul>
@@ -151,7 +158,7 @@ footer button{flex:1;font-size:15px;font-weight:800;padding:12px;border-radius:1
   <div class="sec-title">終了後<span class="cnt"></span></div>
   <ul>
     <li><label><input type="checkbox"><span class="txt">講師コンソールで授業を終了</span></label></li>
-    <li><label><input type="checkbox"><span class="txt">配信停止 → 録画停止</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">配信停止</span></label></li>
     <li><label><input type="checkbox"><span class="txt">OBSを終了した</span></label></li>
   </ul>
 </section>
@@ -165,6 +172,13 @@ footer button{flex:1;font-size:15px;font-weight:800;padding:12px;border-radius:1
   </ol>
 </div>
 
+<div class="know">
+  <h2>📝 ノウハウ集</h2>
+  <ul>
+    <li>OBSのエンコーダは「Apple VT ハードウェア」を使う（x264はCPU負荷が高くフリーズの原因になる）</li>
+  </ul>
+</div>
+
 <div class="credit">Jazz-Steps Academy 運営｜チェックはリロードでリセットされます</div>
 </main>
 
@@ -174,7 +188,7 @@ footer button{flex:1;font-size:15px;font-weight:800;padding:12px;border-radius:1
 </footer>
 
 <script>
-const boxes = [...document.querySelectorAll('input[type=checkbox]')];
+const boxes = [...document.querySelectorAll('main input[type=checkbox]')];
 const bar = document.getElementById('bar');
 const pct = document.getElementById('pct');
 const doneMsg = document.getElementById('done-msg');
@@ -190,7 +204,15 @@ function update(){
     const c = sec.querySelector('.cnt');
     if (c) c.textContent = bs.filter(b=>b.checked).length + '/' + bs.length;
   });
+  document.querySelectorAll('section').forEach(sec => {
+    const bs = [...sec.querySelectorAll('input')];
+    sec.classList.toggle('all-done', bs.length > 0 && bs.every(b=>b.checked));
+  });
 }
+const hideDone = document.getElementById('hide-done');
+function applyHide(){ document.body.classList.toggle('hide-done', hideDone.checked); try{localStorage.setItem('checklist.hideDone', hideDone.checked?'1':'0');}catch(e){} }
+try{ hideDone.checked = localStorage.getItem('checklist.hideDone') === '1'; }catch(e){}
+hideDone.addEventListener('change', applyHide); applyHide();
 boxes.forEach(b => b.addEventListener('change', update));
 document.getElementById('reset').addEventListener('click', () => {
   boxes.forEach(b => b.checked = false); update();
