@@ -76,7 +76,7 @@ footer button{flex:1;font-size:15px;font-weight:800;padding:12px;border-radius:1
 <section>
   <div class="sec-title">起動・事前準備<span class="cnt"></span></div>
   <ul>
-    <li><label><input type="checkbox"><span class="txt">Macを再起動した</span></label></li>
+    <li><label><input type="checkbox"><span class="txt">再起動判定がOK（デスクトップ「OBS配信前チェック.command」）<small>判定が「再起動不要」ならそのまま。「OBS起動し直し」「Mac再起動推奨」が出たら従う</small></span></label></li>
     <li><label><input type="checkbox"><span class="txt">電源（PD給電）がMacに来ている</span></label></li>
     <li><label><input type="checkbox"><span class="txt">回線速度テストをした</span></label></li>
     <li><label><input type="checkbox"><span class="txt">不要なアプリは立ち上がっていない</span></label></li>
@@ -178,6 +178,7 @@ footer button{flex:1;font-size:15px;font-weight:800;padding:12px;border-radius:1
   <h2>📝 ノウハウ集</h2>
   <ul>
     <li>OBSのエンコーダは「Apple VT ハードウェア」を使う（x264はCPU負荷が高くフリーズの原因になる）</li>
+    <li>過去のOBSフリーズの根本原因＝スリープを跨いで開きっぱなしのOBSがUSB/音声デバイスの参照を腐らせる＋x264負荷。判定スクリプトは「OBSがスリープを跨いだか／USB機器とAMS-24が見えているか／稼働日数・メモリ・熱・電源／エンコーダ」を見て、再起動が本当に要るかを出す</li>
   </ul>
 </div>
 
