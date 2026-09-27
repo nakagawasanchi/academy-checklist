@@ -48,7 +48,7 @@ footer button{font:inherit;font-size:15px;font-weight:800;padding:12px 18px;bord
 </header>
 <main>
 <div class="intro">
-  <b>さよ先生へ：</b>分かる範囲で大丈夫です。分からない項目は「わからない」を選ぶか空欄のままで。<br>
+  <b>さよ先生へ：</b>ご自宅からの配信環境を整えるための確認です。該当しない項目は空欄で大丈夫です。<br>
   入力内容はこのブラウザに自動保存されます。最後に下の <b>「Slack用にコピー」</b> を押して、Slackに貼り付けて送ってください。<br>
   
 </div>
@@ -57,8 +57,8 @@ footer button{font:inherit;font-size:15px;font-weight:800;padding:12px 18px;bord
 <section data-sec="① パソコン">
   <h2>① パソコン<span class="cnt"></span></h2>
   <div class="why">Windows PCで配信ソフト（OBS）を動かす前提です。差し込み口と画面まわりを知りたいです</div>
-      <div class="q"><label class="t">パソコンの差し込み口（分かる範囲で）</label>
-    <div class="opts"><label><input type="checkbox" name="pc_ports" value="USB-C（小さい楕円）">USB-C（小さい楕円）</label><label><input type="checkbox" name="pc_ports" value="USB-A（昔ながらの四角）">USB-A（四角）</label><label><input type="checkbox" name="pc_ports" value="HDMI">HDMI</label><label><input type="checkbox" name="pc_ports" value="イヤホン端子">イヤホン端子</label><label><input type="checkbox" name="pc_ports" value="わからない（写真を送る）">わからない（写真を送る）</label></div></div>
+      <div class="q"><label class="t">パソコンの差し込み口</label>
+    <div class="opts"><label><input type="checkbox" name="pc_ports" value="USB-C">USB-C</label><label><input type="checkbox" name="pc_ports" value="USB-A">USB-A</label><label><input type="checkbox" name="pc_ports" value="HDMI">HDMI</label><label><input type="checkbox" name="pc_ports" value="イヤホン端子">イヤホン端子</label></div></div>
   <div class="q"><label class="t">外部ディスプレイ（2枚目の画面）はありますか？<small>講師コンソールと生徒画面を別々に見るのに使います</small></label>
     <div class="opts"><label><input type="radio" name="pc_display" value="ある">ある</label><label><input type="radio" name="pc_display" value="ない">ない</label><label><input type="radio" name="pc_display" value="iPadならある">iPadならある</label></div></div>
   <div class="q"><label class="t">その外部ディスプレイを、配信予定のエリア（ピアノの近く）に置けますか？</label>
@@ -71,8 +71,8 @@ footer button{font:inherit;font-size:15px;font-weight:800;padding:12px 18px;bord
   <h2>② 電子ピアノ・鍵盤<span class="cnt"></span></h2>
   <div class="why">ピアノの音をパソコンに送る方法と、鍵盤を上から撮れるかを知りたいです</div>
   <div class="q"><label class="t">機種名</label><input type="text" name="pf_model" placeholder="例：Roland FP-30X／YAMAHA P-125／CASIO PX-S1100"></div>
-  <div class="q"><label class="t">ピアノの背面・側面にある端子（分かる範囲で）</label>
-    <div class="opts"><label><input type="checkbox" name="pf_ports" value="USB（PCと直結できる）">USB（PCと直結）</label><label><input type="checkbox" name="pf_ports" value="ヘッドホン端子">ヘッドホン端子</label><label><input type="checkbox" name="pf_ports" value="LINE OUT（L/R）">LINE OUT（L/R）</label><label><input type="checkbox" name="pf_ports" value="MIDI（丸い5ピン）">MIDI（丸い5ピン）</label><label><input type="checkbox" name="pf_ports" value="わからない（写真を送る）">わからない（写真を送る）</label></div></div>
+  <div class="q"><label class="t">ピアノの背面・側面にある端子</label>
+    <div class="opts"><label><input type="checkbox" name="pf_ports" value="USB">USB</label><label><input type="checkbox" name="pf_ports" value="ヘッドホン端子">ヘッドホン端子</label><label><input type="checkbox" name="pf_ports" value="LINE OUT（L/R）">LINE OUT（L/R）</label><label><input type="checkbox" name="pf_ports" value="MIDI">MIDI</label></div></div>
     <div class="q"><label class="t">鍵盤を「真上から」撮るカメラを置けそうですか？<small>天井付近か、鍵盤の上に張り出すアーム・三脚が要ります</small></label>
     <div class="opts"><label><input type="radio" name="pf_topcam" value="置けそう（スペースあり）">置けそう</label><label><input type="radio" name="pf_topcam" value="工夫すれば">工夫すれば</label><label><input type="radio" name="pf_topcam" value="難しそう">難しそう</label><label><input type="radio" name="pf_topcam" value="わからない">わからない</label></div></div>
   </section>
@@ -82,11 +82,11 @@ footer button{font:inherit;font-size:15px;font-weight:800;padding:12px 18px;bord
   <div class="why">声とピアノの音を、きれいに・遅れなく届けるために</div>
   <div class="q"><label class="t">持っているマイク</label>
     <div class="opts"><label><input type="checkbox" name="mic" value="USBマイク">USBマイク</label><label><input type="checkbox" name="mic" value="XLRマイク（オーディオIF経由）">XLRマイク</label><label><input type="checkbox" name="mic" value="ピンマイク">ピンマイク</label><label><input type="checkbox" name="mic" value="PC内蔵/イヤホンのマイクのみ">PC内蔵・イヤホンのみ</label><label><input type="checkbox" name="mic" value="なし">なし</label></div></div>
-  <div class="q"><label class="t">オーディオインターフェース（ピアノやマイクをPCにつなぐ箱）はありますか？</label>
-    <div class="opts"><label><input type="radio" name="aif" value="ある">ある</label><label><input type="radio" name="aif" value="ない">ない</label><label><input type="radio" name="aif" value="何のことかわからない">何のことかわからない</label></div>
+  <div class="q"><label class="t">オーディオインターフェースはありますか？</label>
+    <div class="opts"><label><input type="radio" name="aif" value="ある">ある</label><label><input type="radio" name="aif" value="ない">ない</label></div>
     <input class="sub" type="text" name="aif_model" placeholder="「ある」場合は機種名（例：ZOOM AMS-24、Focusrite Scarlett Solo）"></div>
-  <div class="q"><label class="t">ミキサー（複数の音をまとめる機器）はありますか？<small>オーディオインターフェースとは別に</small></label>
-    <div class="opts"><label><input type="radio" name="mixer" value="ある">ある</label><label><input type="radio" name="mixer" value="ない">ない</label><label><input type="radio" name="mixer" value="何のことかわからない">何のことかわからない</label></div>
+  <div class="q"><label class="t">ミキサーはありますか？<small>オーディオインターフェースとは別に</small></label>
+    <div class="opts"><label><input type="radio" name="mixer" value="ある">ある</label><label><input type="radio" name="mixer" value="ない">ない</label></div>
     <input class="sub" type="text" name="mixer_model" placeholder="「ある」場合は機種名（例：YAMAHA MG10XU、ZOOM LiveTrak）"></div>
   <div class="q"><label class="t">配信中に使うヘッドホン・イヤホン</label>
     <div class="opts"><label><input type="radio" name="hp" value="有線がある">有線がある</label><label><input type="radio" name="hp" value="Bluetoothのみ">Bluetoothのみ（遅れが出ます）</label><label><input type="radio" name="hp" value="ない">ない</label></div></div>
