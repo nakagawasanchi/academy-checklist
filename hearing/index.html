@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>配信環境ヒアリング（さよ先生）</title>
+<style>
+:root{--navy:#12293b;--gold:#c9a54e;--gold-l:#f0d9a0;--bg:#f7f4ec;--card:#fff;--ink:#1b2a38;--muted:#8a8271;--line:#e2ddd0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN",sans-serif;background:var(--bg);color:var(--ink);padding-bottom:120px;line-height:1.6}
+header{background:linear-gradient(170deg,#0e2433,#081220);color:var(--gold-l);padding:26px 18px 18px;text-align:center;position:sticky;top:0;z-index:10;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+header h1{font-size:19px;font-weight:800;letter-spacing:.06em}
+header p{font-size:12px;color:#cbbd97;margin-top:6px}
+.pct{font-size:12px;margin-top:6px;color:#cbbd97;font-weight:700}
+main{max-width:640px;margin:0 auto;padding:14px}
+.intro{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;font-size:14px;margin-top:8px}
+.intro b{color:var(--navy)}
+section{margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px 6px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+h2{font-size:16px;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:8px;margin-bottom:6px}
+h2::before{content:"";width:5px;height:18px;border-radius:3px;background:var(--gold)}
+h2 .cnt{margin-left:auto;font-size:12px;color:var(--muted);font-weight:700}
+.why{font-size:12px;color:var(--muted);margin-bottom:10px}
+.q{padding:12px 0;border-top:1px dashed var(--line)}
+.q label.t{display:block;font-size:14.5px;font-weight:700;margin-bottom:8px}
+.q label.t small{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:2px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts label{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:999px;padding:7px 12px;font-size:13.5px;cursor:pointer;background:#fff;user-select:none}
+.opts input{accent-color:var(--gold)}
+.opts label:has(input:checked){border-color:var(--gold);background:#fbf5e4;font-weight:700}
+input[type=text],textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;background:#fff}
+textarea{min-height:64px;resize:vertical}
+input[type=text]:focus,textarea:focus{outline:none;border-color:var(--gold)}
+.sub{margin-top:8px}
+footer{position:fixed;bottom:0;left:0;right:0;background:rgba(247,244,236,.96);backdrop-filter:blur(6px);border-top:1px solid var(--line);padding:10px 14px;display:flex;gap:10px;justify-content:center}
+footer button{font:inherit;font-size:15px;font-weight:800;padding:12px 18px;border-radius:12px;border:none;cursor:pointer}
+#copy{background:linear-gradient(160deg,var(--gold-l),var(--gold) 60%,#a67c2e);color:#241a05;flex:2;max-width:420px}
+#reset{background:#fff;border:2px solid var(--navy);color:var(--navy)}
+#toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 16px;border-radius:999px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none}
+#out{display:none}
+.tip{font-size:12px;color:var(--muted);text-align:center;margin-top:16px}
+</style>
+</head>
+<body>
+<header>
+  <h1>🎹 配信環境ヒアリング</h1>
+  <p>Jazz-Steps Academy ── ご自宅から授業を配信するための確認です</p>
+  <div class="pct" id="pct">0 / 0</div>
+</header>
+<main>
+<div class="intro">
+  <b>さよ先生へ：</b>分かる範囲で大丈夫です。分からない項目は「わからない」を選ぶか空欄のままで。<br>
+  入力内容はこのブラウザに自動保存されます。最後に下の <b>「Slack用にコピー」</b> を押して、Slackに貼り付けて送ってください。<br>
+  <b>写真</b>（机まわり・ピアノ・PCの差し込み口・ルーター）も一緒に送っていただけると一番助かります。
+</div>
+
+<section data-sec="① インターネット回線">
+  <h2>① インターネット回線<span class="cnt"></span></h2>
+  <div class="why">配信は「上り（アップロード）」の速さと安定が命です</div>
+  <div class="q"><label class="t">回線の種類</label>
+    <div class="opts"><label><input type="radio" name="net_type" value="光回線">光回線</label><label><input type="radio" name="net_type" value="ケーブルTV回線">ケーブルTV</label><label><input type="radio" name="net_type" value="ホームルーター/モバイル回線">ホームルーター・モバイル</label><label><input type="radio" name="net_type" value="わからない">わからない</label></div></div>
+  <div class="q"><label class="t">パソコンを有線LAN（ケーブル）でつなげますか？<small>ルーターとPCを置く場所の距離で決まります</small></label>
+    <div class="opts"><label><input type="radio" name="net_wired" value="今もつないでいる">今もつないでいる</label><label><input type="radio" name="net_wired" value="ケーブルを引けばつなげる">ケーブルを引けばつなげる</label><label><input type="radio" name="net_wired" value="難しい（Wi-Fiのみ）">難しい（Wi-Fiのみ）</label><label><input type="radio" name="net_wired" value="わからない">わからない</label></div></div>
+  <div class="q"><label class="t">速度テストの結果<small><a href="https://fast.com/ja/" target="_blank">fast.com</a> を開いて、数秒後に出る数字と「詳細を表示」のアップロード（上り）を記入</small></label>
+    <input type="text" name="net_speed" placeholder="例：下り 320 Mbps／上り 180 Mbps（夜21時に測定）"></div>
+  <div class="q"><label class="t">夜（20〜23時）に、家族が同時に動画やゲームを使いますか？</label>
+    <div class="opts"><label><input type="radio" name="net_share" value="ほぼ使わない">ほぼ使わない</label><label><input type="radio" name="net_share" value="ときどき">ときどき</label><label><input type="radio" name="net_share" value="よく使う">よく使う</label></div></div>
+</section>
+
+<section data-sec="② パソコン">
+  <h2>② パソコン<span class="cnt"></span></h2>
+  <div class="why">配信ソフト（OBS）を動かすので、機種と差し込み口を知りたいです</div>
+  <div class="q"><label class="t">配信に使えるパソコン</label>
+    <div class="opts"><label><input type="radio" name="pc_kind" value="Mac（ノート）">Mac（ノート）</label><label><input type="radio" name="pc_kind" value="Mac（デスクトップ）">Mac（デスクトップ）</label><label><input type="radio" name="pc_kind" value="Windows（ノート）">Windows（ノート）</label><label><input type="radio" name="pc_kind" value="Windows（デスクトップ）">Windows（デスクトップ）</label><label><input type="radio" name="pc_kind" value="持っていない/古くて不安">持っていない・古くて不安</label></div></div>
+  <div class="q"><label class="t">機種名・購入年<small>Macは「このMacについて」、Windowsは「設定→システム→バージョン情報」に出ます</small></label>
+    <input type="text" name="pc_model" placeholder="例：MacBook Air M2 2023年／メモリ16GB"></div>
+  <div class="q"><label class="t">パソコンの差し込み口（分かる範囲で）</label>
+    <div class="opts"><label><input type="checkbox" name="pc_ports" value="USB-C（小さい楕円）">USB-C（小さい楕円）</label><label><input type="checkbox" name="pc_ports" value="USB-A（昔ながらの四角）">USB-A（四角）</label><label><input type="checkbox" name="pc_ports" value="HDMI">HDMI</label><label><input type="checkbox" name="pc_ports" value="イヤホン端子">イヤホン端子</label><label><input type="checkbox" name="pc_ports" value="わからない（写真を送る）">わからない（写真を送る）</label></div></div>
+  <div class="q"><label class="t">外部ディスプレイ（2枚目の画面）はありますか？<small>講師コンソールと生徒画面を別々に見るのに使います</small></label>
+    <div class="opts"><label><input type="radio" name="pc_display" value="ある">ある</label><label><input type="radio" name="pc_display" value="ない">ない</label><label><input type="radio" name="pc_display" value="iPadならある">iPadならある</label></div></div>
+  <div class="q"><label class="t">パソコンにソフト（OBS・Tailscale）を入れてよいですか？</label>
+    <div class="opts"><label><input type="radio" name="pc_install" value="OK">OK</label><label><input type="radio" name="pc_install" value="仕事用PCなので相談">仕事用PCなので相談</label><label><input type="radio" name="pc_install" value="貸出PCがあれば助かる">貸出PCがあれば助かる</label></div></div>
+</section>
+
+<section data-sec="③ 電子ピアノ・鍵盤">
+  <h2>③ 電子ピアノ・鍵盤<span class="cnt"></span></h2>
+  <div class="why">ピアノの音をパソコンに送る方法と、鍵盤を上から撮れるかを知りたいです</div>
+  <div class="q"><label class="t">機種名</label><input type="text" name="pf_model" placeholder="例：Roland FP-30X／YAMAHA P-125／CASIO PX-S1100"></div>
+  <div class="q"><label class="t">ピアノの背面・側面にある端子（分かる範囲で）</label>
+    <div class="opts"><label><input type="checkbox" name="pf_ports" value="USB（PCと直結できる）">USB（PCと直結）</label><label><input type="checkbox" name="pf_ports" value="ヘッドホン端子">ヘッドホン端子</label><label><input type="checkbox" name="pf_ports" value="LINE OUT（L/R）">LINE OUT（L/R）</label><label><input type="checkbox" name="pf_ports" value="MIDI（丸い5ピン）">MIDI（丸い5ピン）</label><label><input type="checkbox" name="pf_ports" value="わからない（写真を送る）">わからない（写真を送る）</label></div></div>
+  <div class="q"><label class="t">Jazz-Stepsアプリとの接続は、今どうしていますか？</label>
+    <div class="opts"><label><input type="radio" name="pf_app" value="USBでつないで判定が出ている">USBでつないで判定が出ている</label><label><input type="radio" name="pf_app" value="つないだことがない">つないだことがない</label><label><input type="radio" name="pf_app" value="うまくいかない">うまくいかない</label></div></div>
+  <div class="q"><label class="t">鍵盤を「真上から」撮るカメラを置けそうですか？<small>天井付近か、鍵盤の上に張り出すアーム・三脚が要ります</small></label>
+    <div class="opts"><label><input type="radio" name="pf_topcam" value="置けそう（スペースあり）">置けそう</label><label><input type="radio" name="pf_topcam" value="工夫すれば">工夫すれば</label><label><input type="radio" name="pf_topcam" value="難しそう">難しそう</label><label><input type="radio" name="pf_topcam" value="わからない">わからない</label></div></div>
+  <div class="q"><label class="t">ピアノの設置場所<small>壁際・部屋の中央・窓の近く など</small></label><input type="text" name="pf_place" placeholder="例：リビングの壁際。右側に窓、上は普通の天井"></div>
+</section>
+
+<section data-sec="④ 音声（マイク・ヘッドホン）">
+  <h2>④ 音声<span class="cnt"></span></h2>
+  <div class="why">声とピアノの音を、きれいに・遅れなく届けるために</div>
+  <div class="q"><label class="t">持っているマイク</label>
+    <div class="opts"><label><input type="checkbox" name="mic" value="USBマイク">USBマイク</label><label><input type="checkbox" name="mic" value="XLRマイク（オーディオIF経由）">XLRマイク</label><label><input type="checkbox" name="mic" value="ピンマイク">ピンマイク</label><label><input type="checkbox" name="mic" value="PC内蔵/イヤホンのマイクのみ">PC内蔵・イヤホンのみ</label><label><input type="checkbox" name="mic" value="なし">なし</label></div></div>
+  <div class="q"><label class="t">オーディオインターフェース（ピアノやマイクをPCにつなぐ箱）はありますか？</label>
+    <div class="opts"><label><input type="radio" name="aif" value="ある">ある</label><label><input type="radio" name="aif" value="ない">ない</label><label><input type="radio" name="aif" value="何のことかわからない">何のことかわからない</label></div>
+    <input class="sub" type="text" name="aif_model" placeholder="「ある」場合は機種名（例：ZOOM AMS-24、Focusrite Scarlett Solo）"></div>
+  <div class="q"><label class="t">配信中に使うヘッドホン・イヤホン</label>
+    <div class="opts"><label><input type="radio" name="hp" value="有線がある">有線がある</label><label><input type="radio" name="hp" value="Bluetoothのみ">Bluetoothのみ（遅れが出ます）</label><label><input type="radio" name="hp" value="ない">ない</label></div></div>
+  <div class="q"><label class="t">部屋の音の環境</label>
+    <div class="opts"><label><input type="checkbox" name="room_sound" value="静か">静か</label><label><input type="checkbox" name="room_sound" value="生活音が入る（家族・ペット）">生活音が入る</label><label><input type="checkbox" name="room_sound" value="外の音が入る（道路・電車）">外の音が入る</label><label><input type="checkbox" name="room_sound" value="声が響く（反響が大きい）">声が響く</label></div></div>
+</section>
+
+<section data-sec="⑤ 映像（カメラ・照明・背景）">
+  <h2>⑤ 映像<span class="cnt"></span></h2>
+  <div class="why">講師カメラ（正面）と鍵盤カメラ（真上）の2台が基本です</div>
+  <div class="q"><label class="t">正面を撮るカメラの候補</label>
+    <div class="opts"><label><input type="checkbox" name="cam" value="Webカメラ">Webカメラ</label><label><input type="checkbox" name="cam" value="iPhone/iPad（連係カメラ）">iPhone・iPad</label><label><input type="checkbox" name="cam" value="ミラーレス/デジカメ">ミラーレス・デジカメ</label><label><input type="checkbox" name="cam" value="PC内蔵のみ">PC内蔵のみ</label><label><input type="checkbox" name="cam" value="なし">なし</label></div></div>
+  <div class="q"><label class="t">三脚・カメラアーム・スマホスタンドはありますか？</label>
+    <div class="opts"><label><input type="checkbox" name="tripod" value="三脚">三脚</label><label><input type="checkbox" name="tripod" value="卓上アーム/クリップ">卓上アーム・クリップ</label><label><input type="checkbox" name="tripod" value="スマホスタンド">スマホスタンド</label><label><input type="checkbox" name="tripod" value="なし">なし</label></div></div>
+  <div class="q"><label class="t">配信する時間帯の明るさ</label>
+    <div class="opts"><label><input type="radio" name="light" value="十分明るい">十分明るい</label><label><input type="radio" name="light" value="やや暗い">やや暗い</label><label><input type="radio" name="light" value="逆光になる（窓が背中側）">逆光になる</label><label><input type="radio" name="light" value="照明機材がある">照明機材がある</label></div></div>
+  <div class="q"><label class="t">背景に映るもの<small>映したくないもの・片付けが必要なもの</small></label><input type="text" name="bg" placeholder="例：本棚と家族の写真。カーテンに変えられる"></div>
+</section>
+
+<section data-sec="⑥ 部屋・電源・時間">
+  <h2>⑥ 部屋・電源・時間<span class="cnt"></span></h2>
+  <div class="q"><label class="t">ピアノの近くに、パソコンと機材を置ける机やスペースはありますか？</label>
+    <div class="opts"><label><input type="radio" name="desk" value="ある（常設できる）">ある（常設できる）</label><label><input type="radio" name="desk" value="毎回出し入れになる">毎回出し入れになる</label><label><input type="radio" name="desk" value="ない">ない</label></div></div>
+  <div class="q"><label class="t">近くのコンセントの口数</label>
+    <div class="opts"><label><input type="radio" name="power" value="1〜2口">1〜2口</label><label><input type="radio" name="power" value="3口以上/延長タップあり">3口以上・延長タップあり</label><label><input type="radio" name="power" value="遠い">遠い</label></div></div>
+  <div class="q"><label class="t">授業の時間帯（13:30〜14:30／20:30〜22:30）に、部屋を1人で使えますか？</label>
+    <div class="opts"><label><input type="radio" name="alone" value="使える">使える</label><label><input type="radio" name="alone" value="曜日による">曜日による</label><label><input type="radio" name="alone" value="難しい日が多い">難しい日が多い</label></div>
+    <input class="sub" type="text" name="alone_note" placeholder="補足（例：火曜夜は子どもが隣の部屋にいる）"></div>
+  <div class="q"><label class="t">授業の何分前から準備に入れますか？</label>
+    <div class="opts"><label><input type="radio" name="prep" value="60分前">60分前</label><label><input type="radio" name="prep" value="30分前">30分前</label><label><input type="radio" name="prep" value="15分前">15分前</label></div></div>
+</section>
+
+<section data-sec="⑦ 手元の端末">
+  <h2>⑦ 手元の端末<span class="cnt"></span></h2>
+  <div class="why">進行表（ペーサー）・LINE・生徒画面の確認に使います</div>
+  <div class="q"><label class="t">パソコン以外に授業中に手元に置ける端末</label>
+    <div class="opts"><label><input type="checkbox" name="devices" value="iPad/タブレット">iPad・タブレット</label><label><input type="checkbox" name="devices" value="iPhone">iPhone</label><label><input type="checkbox" name="devices" value="Android">Android</label><label><input type="checkbox" name="devices" value="2台目のPC">2台目のPC</label><label><input type="checkbox" name="devices" value="なし">なし</label></div></div>
+</section>
+
+<section data-sec="⑧ 経験・慣れ">
+  <h2>⑧ 経験・慣れ<span class="cnt"></span></h2>
+  <div class="why">サポートの手厚さを決めるためです。正直に教えてください</div>
+  <div class="q"><label class="t">これまでのオンライン経験</label>
+    <div class="opts"><label><input type="checkbox" name="exp" value="Zoomでレッスンをした">Zoomレッスン</label><label><input type="checkbox" name="exp" value="インスタライブ/YouTubeライブをした">インスタ・YouTubeライブ</label><label><input type="checkbox" name="exp" value="OBSを使ったことがある">OBSを使ったことがある</label><label><input type="checkbox" name="exp" value="どれもない">どれもない</label></div></div>
+  <div class="q"><label class="t">パソコンの操作について</label>
+    <div class="opts"><label><input type="radio" name="skill" value="設定や配線は自分でできる">設定や配線は自分でできる</label><label><input type="radio" name="skill" value="手順書があればできる">手順書があればできる</label><label><input type="radio" name="skill" value="苦手。誰かに見てほしい">苦手。誰かに見てほしい</label></div></div>
+  <div class="q"><label class="t">トラブル時（映像が固まる等）に、指示を受けながら自分でアプリの再起動などができそうですか？</label>
+    <div class="opts"><label><input type="radio" name="trouble" value="できる">できる</label><label><input type="radio" name="trouble" value="たぶんできる">たぶんできる</label><label><input type="radio" name="trouble" value="不安">不安</label></div></div>
+</section>
+
+<section data-sec="⑨ 機材の貸出・購入・訪問">
+  <h2>⑨ 機材の貸出・購入・訪問<span class="cnt"></span></h2>
+  <div class="q"><label class="t">運営から機材を貸し出す場合、あると助かるもの</label>
+    <div class="opts"><label><input type="checkbox" name="rent" value="鍵盤俯瞰カメラ">鍵盤俯瞰カメラ</label><label><input type="checkbox" name="rent" value="講師カメラ">講師カメラ</label><label><input type="checkbox" name="rent" value="オーディオインターフェース">オーディオIF</label><label><input type="checkbox" name="rent" value="マイク">マイク</label><label><input type="checkbox" name="rent" value="カメラアーム/三脚">アーム・三脚</label><label><input type="checkbox" name="rent" value="照明">照明</label><label><input type="checkbox" name="rent" value="LANケーブル">LANケーブル</label><label><input type="checkbox" name="rent" value="配信用PC">配信用PC</label></div></div>
+  <div class="q"><label class="t">初回のセットアップで、運営スタッフがご自宅に伺って設置するのはOKですか？</label>
+    <div class="opts"><label><input type="radio" name="visit" value="OK">OK</label><label><input type="radio" name="visit" value="オンライン（ビデオ通話）で一緒にやりたい">オンラインで一緒にやりたい</label><label><input type="radio" name="visit" value="自分でやってみる">自分でやってみる</label></div></div>
+  <div class="q"><label class="t">配信スタジオ（中川宅や別拠点）に通う選択肢について</label>
+    <div class="opts"><label><input type="radio" name="studio" value="通える（曜日次第）">通える（曜日次第）</label><label><input type="radio" name="studio" value="自宅が基本、たまになら">自宅が基本、たまになら</label><label><input type="radio" name="studio" value="自宅のみ希望">自宅のみ希望</label></div></div>
+</section>
+
+<section data-sec="⑩ その他">
+  <h2>⑩ その他<span class="cnt"></span></h2>
+  <div class="q"><label class="t">不安なこと・質問・希望があれば何でも</label><textarea name="free" placeholder="例：カメラの位置が決まらない／夜はなるべく短時間で片付けたい　など"></textarea></div>
+  <div class="q"><label class="t">送っていただける写真<small>後でSlackに添付してください</small></label>
+    <div class="opts"><label><input type="checkbox" name="photos" value="机まわり全体">机まわり全体</label><label><input type="checkbox" name="photos" value="ピアノと周辺">ピアノと周辺</label><label><input type="checkbox" name="photos" value="PCの差し込み口">PCの差し込み口</label><label><input type="checkbox" name="photos" value="ピアノの背面端子">ピアノの背面端子</label><label><input type="checkbox" name="photos" value="ルーター周り">ルーター周り</label></div></div>
+</section>
+
+<p class="tip">入力はこのブラウザに自動保存されます。ページを閉じても続きから書けます。</p>
+<textarea id="out"></textarea>
+</main>
+
+<footer>
+  <button id="reset">入力をクリア</button>
+  <button id="copy">📋 Slack用にコピー</button>
+</footer>
+<div id="toast">コピーしました。Slackに貼り付けて送ってください</div>
+
+<script>
+const KEY='hearing.sayo.v1';
+const form=document.querySelector('main');
+const fields=[...form.querySelectorAll('input[name],textarea[name]')];
+// 自動保存
+function save(){const d={};fields.forEach(f=>{if(f.type==='radio'){if(f.checked)d[f.name]=f.value;}else if(f.type==='checkbox'){d[f.name]=d[f.name]||[];if(f.checked)d[f.name].push(f.value);}else d[f.name]=f.value;});try{localStorage.setItem(KEY,JSON.stringify(d));}catch(e){}update();}
+function load(){let d={};try{d=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){}fields.forEach(f=>{if(!(f.name in d))return;const v=d[f.name];if(f.type==='radio')f.checked=(v===f.value);else if(f.type==='checkbox')f.checked=Array.isArray(v)&&v.includes(f.value);else f.value=v;});update();}
+fields.forEach(f=>f.addEventListener(f.type==='text'||f.tagName==='TEXTAREA'?'input':'change',save));
+// 進捗
+function qAnswered(q){const ins=[...q.querySelectorAll('input[name],textarea[name]')];return ins.some(i=>(i.type==='radio'||i.type==='checkbox')?i.checked:i.value.trim());}
+function update(){let t=0,a=0;document.querySelectorAll('section').forEach(s=>{const qs=[...s.querySelectorAll('.q')];const n=qs.filter(qAnswered).length;t+=qs.length;a+=n;const c=s.querySelector('.cnt');if(c)c.textContent=n+'/'+qs.length;});document.getElementById('pct').textContent='回答 '+a+' / '+t;}
+// Slack用テキスト
+function build(){const lines=['*配信環境ヒアリング（さよ先生）*','回答日: '+new Date().toLocaleDateString('ja-JP'),''];
+ document.querySelectorAll('section').forEach(s=>{lines.push('*'+s.dataset.sec+'*');
+  s.querySelectorAll('.q').forEach(q=>{const title=q.querySelector('label.t').childNodes[0].textContent.trim();const vals=[];const seen=new Set();
+   q.querySelectorAll('input[name],textarea[name]').forEach(i=>{if(i.type==='radio'||i.type==='checkbox'){if(i.checked)vals.push(i.value);}else if(i.value.trim()){vals.push(i.value.trim());}});
+   lines.push('• '+title+'： '+(vals.length?vals.join('、'):'（未回答）'));});
+  lines.push('');});
+ return lines.join('\n');}
+async function copy(){const txt=build();const out=document.getElementById('out');out.value=txt;try{await navigator.clipboard.writeText(txt);}catch(e){out.style.display='block';out.select();document.execCommand('copy');out.style.display='none';}
+ const t=document.getElementById('toast');t.style.opacity=1;setTimeout(()=>t.style.opacity=0,2200);}
+document.getElementById('copy').addEventListener('click',copy);
+document.getElementById('reset').addEventListener('click',()=>{if(!confirm('入力をすべて消しますか？'))return;fields.forEach(f=>{if(f.type==='radio'||f.type==='checkbox')f.checked=false;else f.value='';});try{localStorage.removeItem(KEY);}catch(e){}update();});
+load();
+</script>
+</body>
+</html>
