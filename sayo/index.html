@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>配信チェックリスト（さよ先生）</title>
+<style>
+:root{--navy:#0e2433;--navy2:#132e42;--gold:#d9b45c;--goldL:#f0d9a0;--ink:#f2ead7;--mute:#a99f87;--line:rgba(217,180,92,.28)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:linear-gradient(170deg,#0e2433,#081220);color:var(--ink);min-height:100vh;
+ font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","ヒラギノ角ゴシック","Noto Sans JP",sans-serif;line-height:1.55;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px calc(40px + env(safe-area-inset-bottom))}
+header{position:sticky;top:0;z-index:5;background:rgba(10,24,38,.94);backdrop-filter:blur(8px);padding:14px 16px 12px;border-bottom:1px solid var(--line)}
+header .in{max-width:760px;margin:0 auto}
+.brand{font-size:12px;letter-spacing:.14em;color:var(--gold);font-weight:700}
+h1{font-size:21px;font-weight:800;margin-top:2px}
+.bar{display:flex;align-items:center;gap:10px;margin-top:10px}
+.track{flex:1;height:10px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--goldL));transition:width .25s}
+.pct{font-size:14px;font-weight:800;color:var(--goldL);min-width:70px;text-align:right}
+.reset{border:1px solid var(--line);background:transparent;color:var(--mute);font:inherit;font-size:13px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.reset.arm{border-color:#e06b6b;color:#fff;background:#8a2f35}
+section{margin-top:22px}
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:0 2px 8px;border-bottom:1px solid var(--line)}
+.sh h2{font-size:17px;font-weight:800;color:var(--goldL)}
+.sh h2 small{font-size:12px;color:var(--mute);font-weight:700;margin-right:6px;letter-spacing:.08em}
+.sh .cnt{font-size:14px;font-weight:800;color:var(--mute)}
+.sh.done .cnt{color:var(--gold)}
+ul{list-style:none}
+li{display:flex;gap:14px;align-items:flex-start;padding:14px 6px;border-bottom:1px solid rgba(255,255,255,.07);cursor:pointer;user-select:none;border-radius:8px}
+li:active{background:rgba(217,180,92,.08)}
+.box{flex:0 0 30px;height:30px;border-radius:8px;border:2px solid var(--gold);display:grid;place-items:center;margin-top:1px;transition:background .15s}
+.box svg{width:18px;height:18px;opacity:0;transition:opacity .15s}
+li.on .box{background:var(--gold)}
+li.on .box svg{opacity:1}
+.t{font-size:16px;font-weight:600}
+li.on .t{color:var(--mute);text-decoration:line-through;text-decoration-color:rgba(217,180,92,.6)}
+.n{display:block;font-size:13px;color:var(--mute);margin-top:3px;font-weight:500}
+.n.warn{color:#f0b46b}
+details{margin-top:26px;border:1px solid var(--line);border-radius:12px;background:rgba(10,24,38,.6)}
+summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:800;color:var(--goldL);font-size:16px;display:flex;justify-content:space-between}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"＋";color:var(--gold)}
+details[open] summary::after{content:"－"}
+.tr{padding:0 16px 14px}
+.tr div{padding:12px 0;border-top:1px solid rgba(255,255,255,.07)}
+.tr b{display:block;font-size:15px;margin-bottom:3px}
+.tr p{font-size:14px;color:#ddd3bb}
+.foot{margin-top:26px;font-size:12px;color:var(--mute);text-align:center}
+.err{margin-top:40px;text-align:center;color:#f0b46b}
+</style>
+</head>
+<body>
+<header><div class="in">
+  <div class="brand">Jazz-Steps Academy</div>
+  <h1 id="title">配信チェックリスト（さよ先生）</h1>
+  <div class="bar"><div class="track"><div class="fill" id="fill"></div></div><div class="pct" id="pct">0 / 0</div><button class="reset" id="reset">すべてリセット</button></div>
+</div></header>
+<div class="wrap" id="main"></div>
+<script>
+const KEY='sayo-checklist-v1';
+const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="#0e2433" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
+let state={};
+function load(){try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){state={}}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let data=null;
+function render(){
+  const m=document.getElementById('main');let h='';
+  data.sections.forEach((s,si)=>{
+    h+=`<section data-s="${s.id}"><div class="sh"><h2><small>${si+1}</small>${esc(s.title)}</h2><span class="cnt"></span></div><ul>`;
+    s.items.forEach(it=>{const k=s.id+'/'+it.id;
+      const warn=/要確認/.test(it.note||'')?' warn':'';
+      h+=`<li data-k="${k}" class="${state[k]?'on':''}"><span class="box">${CHECK}</span><span class="t">${esc(it.text)}${it.note?`<span class="n${warn}">${esc(it.note)}</span>`:''}</span></li>`});
+    h+='</ul></section>';
+  });
+  if(data.trouble&&data.trouble.length){
+    h+='<details><summary>困ったとき</summary><div class="tr">';
+    data.trouble.forEach(t=>h+=`<div><b>${esc(t.title)}</b><p>${esc(t.text)}</p></div>`);
+    h+='</div></details>';
+  }
+  h+=`<div class="foot">チェックはこの端末のブラウザに保存されます${data.updated?'・項目更新 '+esc(data.updated):''}</div>`;
+  m.innerHTML=h;
+  m.querySelectorAll('li').forEach(li=>li.onclick=()=>{const k=li.dataset.k;state[k]=!state[k];if(!state[k])delete state[k];li.classList.toggle('on',!!state[k]);save();count()});
+  count();
+}
+function count(){
+  let all=0,done=0;
+  data.sections.forEach(s=>{let d=0;s.items.forEach(it=>{if(state[s.id+'/'+it.id])d++});all+=s.items.length;done+=d;
+    const el=document.querySelector(`section[data-s="${s.id}"] .sh`);el.querySelector('.cnt').textContent=`${d} / ${s.items.length}`;el.classList.toggle('done',d===s.items.length)});
+  document.getElementById('fill').style.width=(all?done/all*100:0)+'%';
+  document.getElementById('pct').textContent=`${done} / ${all}`;
+}
+let armT=null;const rb=document.getElementById('reset');
+rb.onclick=()=>{
+  if(!rb.classList.contains('arm')){rb.classList.add('arm');rb.textContent='もう一度押すとリセット';clearTimeout(armT);armT=setTimeout(()=>{rb.classList.remove('arm');rb.textContent='すべてリセット'},3000);return}
+  clearTimeout(armT);rb.classList.remove('arm');rb.textContent='すべてリセット';state={};save();render();scrollTo(0,0);
+};
+load();
+fetch('checklist.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{data=d;if(d.title){document.getElementById('title').textContent=d.title;document.title=d.title}render()})
+ .catch(()=>{document.getElementById('main').innerHTML='<p class="err">項目を読み込めませんでした。再読み込みしてください。</p>'});
+</script>
+</body>
+</html>
